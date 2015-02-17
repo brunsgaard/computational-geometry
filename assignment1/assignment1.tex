@@ -24,9 +24,9 @@ Brilliant stuff goes here...
 Brilliant stuff goes here...
 
 \chapter*{3.8}
+When we insert a new edge in the DCEL we split a face into two faces, this means we have to update the incident-face information in $O(n)$ half-edge records. In the case of the polygon-partitioning algorithm, we do not need to store the face information, so adding a half-edge only requires that we make local updates to the four half-edges of the face we are splitting that has origin and destination at the vertices that are connected by the new edge. 
 
 \chapter*{3.14 Visibility polygon}
-
 Let $P$ be the polygon that is visible from $q$. If we traverse the edges of $P$ in CCW order then it holds that the angle between the lines $qp_i$ and $qp_{i+1}$ lie in $[0, \pi]$ and that angular sum is $2\pi$.
 
 If we can find a point $p_0$ that is visible from $q$ then we can find the visibility polygon by starting in $p_0$ and adding vertices that satisfy the local angle constraint.
