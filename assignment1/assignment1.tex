@@ -15,13 +15,39 @@
 \maketitle
 
 \chapter*{Assignment 1.3}
-Brilliant stuff goes here...
+\begin{enumerate}
+  \item Start by sorting the points by $x$ coordinate.
+  \item Add and edge $e$ between the two points with the most left
+    $x$-coordinate and the most right $x$-coordinate.
+  \item Create two empty lists $L_{\textrm{upper}}$ and $L_{\textrm{lower}}$.
+  \item Iterate over the sorted list of points and determine whether each point
+    lies above $e$. If the point is above, append the point to
+    $L_{\textrm{upper}}$ otherwise append the point to $L_{\textrm{lower}}$.
+  \item Reverse $L_{\textrm{lower}}$ and concatenate to $L_{\textrm{upper}}$
+\end{enumerate}
 
 \chapter*{Assignment 1.6}
-Brilliant stuff goes here...
+\paragraph{a} The line segments will be a convex combination of the two
+endpoints, and thus the line segments will also be in the set of all convex
+combinations of all the endpoints, which is the definition of the convex hull.
+$$ P \supseteq S \supseteq \mathcal{CH}_P $$
+Also, we know that the points are on the lines and thus we can regard the
+points as being a seubset of the lines, which again is a subset of the convex
+hull to the lines.
+$$ S \supseteq P \supseteq \mathcal{CH}_S $$
+Thus,
+$$ \mathcal{CH}_S = \mathcal{CH}_P $$
+\paragraph{b} Todo 
 
 \chapter*{Chan}
-Brilliant stuff goes here...
+The algorithm combines the approach of Grahams scan and Jarvis’s march. The
+idea is to partition the points into $m$ smaller sets of size $\rceil m/n
+\lceil$. And then use Grahams scan to construct a convex hull for each of the
+subsets. Afterwards the idea of Jarvis march is applied to wrap around the
+convex hulls of the subsets. Because tangent finding between a point and a
+convex polygon can be done in logarithmic time this approach is very efficient
+and the result is a convex hull for all the points.
+
 
 \chapter*{3.8}
 When we insert a new edge in the DCEL we split a face into two faces, this means we have to update the incident-face information in $O(n)$ half-edge records. In the case of the polygon-partitioning algorithm, we do not need to store the face information, so adding a half-edge only requires that we make local updates to the four half-edges of the face we are splitting that has origin and destination at the vertices that are connected by the new edge. 
