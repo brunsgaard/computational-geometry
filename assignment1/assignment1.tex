@@ -32,12 +32,17 @@ endpoints, and thus the line segments will also be in the set of all convex
 combinations of all the endpoints, which is the definition of the convex hull.
 $$ P \supseteq S \supseteq \mathcal{CH}_P $$
 Also, we know that the points are on the lines and thus we can regard the
-points as being a seubset of the lines, which again is a subset of the convex
+points as being a subset of the lines, which again is a subset of the convex
 hull to the lines.
 $$ S \supseteq P \supseteq \mathcal{CH}_S $$
 Thus,
 $$ \mathcal{CH}_S = \mathcal{CH}_P $$
-\paragraph{b} Todo 
+\paragraph{b} The approach we we use is similar to Grahams scan, but we make
+a simple addition and every time we add an vertex $p_{i}$, we also check the
+angle between the newly added vertex and the starting point $p_0$, thus in
+addition to pop the last vertex from the list if $p_{i-2}p_{i-1i}p_{i}$ we
+also pop the last item of the list if $p_{i-1}p_{i}p_{0}$.
+
 
 \chapter*{Chan}
 The algorithm combines the approach of Grahams scan and Jarvis’s march. The
