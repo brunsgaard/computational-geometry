@@ -1,5 +1,14 @@
 \documentclass[10pt,a4paper,final,oneside,openany,article]{memoir}
 
+% http://www.johndcook.com/blog/2009/09/14/latex-multi-part-definitions/
+\newcommand{\twopartdef}[4] {
+  \left\{
+    \begin{array}{ll}
+      #1 & \mbox{if } #2 \\
+      {#3} & \mbox{if } #4
+    \end{array}
+  \right.
+}
 \input{prelude}
 
 \title{Computational Geometry, Assignment 1}
@@ -15,6 +24,42 @@
 \maketitle
 
 \chapter*{Assignment 5.1}
+
+\paragraph{Part 1}
+We need to solve the recurrence
+\begin{equation}
+  \label{eq:Q}
+  Q(n) = \twopartdef{O(1)}{n = 1,}{2 + 2Q(n/4)}{n > 1.}
+\end{equation}
+From case 1 of the Master theorem we have
+\begin{align*}
+  f(n) = O(n^c) \implies Q(n) = O(n^{\log_ba}),
+\end{align*}
+where $c < \log_ba$. If we look at the recursive part of (\ref{eq:Q}) we find
+\begin{align*}
+  a &= 2\\
+  b &= 4\\
+  \log_ba &= \log_42 = 1/2\\
+  f(n) &= 2 = O(1) = O(n^0)
+\end{align*}
+so 
+\begin{align*}
+  Q(n) = O(n^{1/2}) = O(\sqrt{n})
+\end{align*}
+
+\paragraph{Part 2}
+We need to show that $\Omega(\sqrt{n})$ is a lower bound for queries in the kd-tree. Consider the number of regions that are intersected by a horizontal query line. We assume that the line does not coincide with a horizontal split line. For simplicity we look at the case of a full kd-tree with the lowest layer being a horizontal split, that is $n = 2^k - 1$ where $k$ is an even positive integer, and the first split line is vertical.
+
+\paragraph{}
+A horizontal query line will intersect $O(\sqrt{n})$ regions. 
+
+\paragraph{}
+To see that this is the case, consider what happens when we add a new layer to the kd-tree. If the layer is vertical, then each region is split in two by a vertical line, so if the query line passed through a region it will now pass through two regions, and the number of intersections is doubled. If we the layer is horizontal, then each region is split in two by a horizontal line and since the query line does not coincide with a horizontal split line (by assumption) the number of intersections is the same. When we add a new layer $n$ is doubled, and the number of intersections is doubled when we have added two layers, so the number of intersections is $O(\sqrt{n})$.
+
+\paragraph{}
+Now we can construct a query rectangle by setting $x_1 = -\infty, x_2 = \infty$ and $y_1 < y_2$. The top and bottom of the query rectangle will intersect $O(\sqrt{n})$ regions, and each of the intersected regions will not be fully contained in the query rectangle so we will need to search the intersected region, giving us $\Omega(\sqrt{n})$ query time.
+
+
 
 \chapter*{Assignment 5.10}
 
