@@ -11,12 +11,12 @@
 }
 \input{prelude}
 
-\title{Computational Geometry, Assignment 1}
+\title{Computational Geometry, Assignment 2}
 \author{
     Jonas Brunsgaard \& Silas Ørting
 }
 
-\date{18th February 2015}
+\date{25th February 2015}
 
 \bibliography{bibliography}
 
@@ -62,5 +62,69 @@ Now we can construct a query rectangle by setting $x_1 = -\infty, x_2 = \infty$ 
 
 
 \chapter*{Assignment 5.10}
+
+\paragraph{a} A solution to \emph{Range query counting} would be to keep
+track of the number of leafs in any subtree. This can be done by adding a
+\emph{counter} $v.c$ for each node $v$ (subtree) in the BST and when a new item is
+inserted in the BST and "pass through the node on the way down the BST" these
+counters are incremented, this additional step in construction will not impact
+the construction time of $nlog(n)$. The idea is depicted in Figure 1. 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{fig1.png}
+    \caption{Datastructure for range counting queries.}
+    \label{fig:1}
+\end{figure}
+Now, to perform a range query we simply make a small modification to the
+\texttt{1DrangeQuery}, p. 97 in the book. We introduce a new variable $n$
+variable and make the following change. 
+
+\begin{itemize}
+    \item On line 3, instead of reporing the point we increment $n$ by one if
+$v_{\textrm{split}}$ is in the range.
+    \item On line 8, instead of calling the subrouting \texttt{reportsubtree},
+    we read and add the value of the counter of to $n$.
+    $$n += lc(v).c$$
+    \item Finally we return $n$.
+\end{itemize}
+As we get rid of the \texttt{ReportSubtree} procedure we eleminate the $k$
+factor as we wanted. To prove that counting can be done in $log(n)$ time, we
+observe that our data structure is a binary search tree. Thus a search can be
+done in $log(n)$ time. To perform a range search we perform exactly two searches
+to the bottom of the tree. Everything else other than the search down the tree
+takes constant time and thus the finale result of is 
+$$O(2log(n)) = O(log(n))$$
+
+\paragraph{b} Using a range tree the idea from above can be generalized to
+higher dimensions. The approach is that we for each node in the 1-level tree
+$\mathcal{T}$, hold and associate data structure $\mathcal{T}_{assoc}$. The
+associate data structure consists of the cannonical sets, as depicted in Figure 2.
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{fig2.png}
+    \caption{Cannonical sets for $\mathcal{T}$ BST}
+    \label{fig:2}
+\end{figure}
+
+These cannonical sets are used to build a new BST $\mathcal{T}_{assoc}$ sorted
+on the $y$-coordinate, but otherwise, exactly as described in subassignment
+\textbf{a}, for every node in $\mathcal{T}$.
+
+When performing a range counting query we simply search $\mathcal{T}$ and
+at every level we may search the 2-level data structure if the range of the
+$x$-coordinates are within the search range. The search in an associate data
+structure will return the count of points in the search range for that
+cannonical set, and we simply add all these counts together on the way "down"
+$\mathcal{T}$ to obtain the finale number of points in our search range.
+
+A range counting query consists of two seaches (a constant we throw
+away) in the $\mathcal{T}$. The length of the path in $\mathcal{T}$ is
+at most $O(log(n)$. For each level we may perform a new binary binary
+search in $\mathcal{T}_{assoc}$, and thus we obtain a time complexity of
+$O(log(n)log(n)) = O(log^{2}n)$.
+
+This can be generalized to higher dimensions, where each dimension will
+require a factor of $O(log(n)$, thus we can conclude that range counting
+queries in the $d$'th dimension can be performed in $O(log^{d}n)$ time.
 
 \end{document}
