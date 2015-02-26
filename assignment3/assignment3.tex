@@ -1,0 +1,59 @@
+\documentclass[10pt,a4paper,final,oneside,openany,article]{memoir}
+
+\input{prelude}
+
+% http://www.johndcook.com/blog/2009/09/14/latex-multi-part-definitions/
+\newcommand{\twopartdef}[4] {
+  \left\{
+    \begin{array}{ll}
+      #1 & \mbox{if } #2 \\
+      {#3} & \mbox{if } #4
+    \end{array}
+  \right.
+}
+
+\newcommand{\floor}[1] {\lfloor #1 \rfloor}
+
+\newtheorem{pinQ}{Theorem}
+\newtheorem{pinQtime}[pinQ]{Theorem}
+
+\title{Computational Geometry, Assignment 3}
+\author{
+    Jonas Brunsgaard \& Silas Ørting
+}
+\begin{document}
+\maketitle
+
+\chapter*{Assignment 6.6}
+We need to test if a query point $q$ is inside a y-monotone polygon $P$ in $O(\log n)$ time. If $q$ is below the top vertex in $P$ and above the bottom vertex in $P$ then for each side of $P$ there will be a pair of adjacent vertices bounding the $y$-coordinate of $q$. Let the line segment defined by the left pair be denoted $e_l$ and the other $e_r$. Let $e_a$ be a horisontal line going through the vertex above $q$ with the lowest $y$-coordinate, and let $e_b$ be a horisontal line through the vertex below $q$ with the greatest $y$-coordinate. 
+
+\begin{pinQ}
+  Iff $q$ is in $P$ it will lie in the quadrilateral defined by the intersection of $e_l, e_r, e_a, e_b$.  
+\end{pinQ}
+
+\begin{proof}
+  Assume $q$ is in $P$, then by construction it will be below $e_a$ and above $e_b$. Since $q$ is in $P$ it must lie to the right of the left side of $P$ and to the left of the right side of $P$. Since the left and right side of the quadrilateral coincides with the left and right side of $P$, $q$ is bounded by the four sides of the quadrilateral and so must lie in it.
+  
+  Assume $q$ lies in the quadrilateral. By construction the quadrilateral is fully contained in $P$ so $q$ also lies in $P$.
+\end{proof}
+
+We can find the vertices defining $e_l$ and $e_r$ by binary search in the array.
+We can determine if a vertex is on the left side, the right side, the top or the bottom by looking at the y-coordinate of the previous and next vertex. 
+Assume the first entry in the array is the top vertex of $P$. We can find the bottom vertex by binary search, going right when we are on the left side and left when we are on the right side. If $q$ is above the top vertex or below the bottom vertex it is not in $P$ and we are done. Otherwise we need to find $e_l$ and $e_r$. This can be done by binary search on each of the sides separately. 
+
+\begin{pinQtime}
+  Determining if $q$ is in $P$ can be done in $O(\log n)$ time
+\end{pinQtime}
+
+\begin{proof}
+  We need one binary search to find the bottom vertex taking $O(\log n)$ time. We need two binary searches to find $e_l$ and $e_r$ taking $O(\log n)$ time. Determining if $q$ is in the quadrilateral can be done in $O(1)$ time. So the total time is $O(\log n)$.
+\end{proof}
+
+
+\chapter*{Assignment 6.16}
+
+\chapter*{Assignment 10.}
+
+\chapter*{Assignment 10.}
+
+\end{document}
