@@ -35,13 +35,13 @@
 We need to test if a query point $q$ is inside a y-monotone polygon $P$ in $O(\log n)$ time. If $q$ is below the top vertex in $P$ and above the bottom vertex in $P$ then for each side of $P$ there will be a pair of adjacent vertices bounding the $y$-coordinate of $q$. Let the line segment defined by the left pair be denoted $e_l$ and the other $e_r$. Let $e_a$ be a horisontal line going through the vertex above $q$ with the lowest $y$-coordinate, and let $e_b$ be a horisontal line through the vertex below $q$ with the greatest $y$-coordinate. 
 
 \begin{pinQ}
-  Iff $q$ is in $P$ it will lie in the quadrilateral defined by the intersection of $e_l, e_r, e_a, e_b$.  
+  Iff $q$ is in $P$ it will lie in the trapezoid defined by the intersection of $e_l, e_r, e_a, e_b$.  
 \end{pinQ}
 
 \begin{proof}
-  Assume $q$ is in $P$, then by construction it will be below $e_a$ and above $e_b$. Since $q$ is in $P$ it must lie to the right of the left side of $P$ and to the left of the right side of $P$. Since the left and right side of the quadrilateral coincides with the left and right side of $P$, $q$ is bounded by the four sides of the quadrilateral and so must lie in it.
+  Assume $q$ is in $P$, then by construction it will be below $e_a$ and above $e_b$. Since $q$ is in $P$ it must lie to the right of the left side of $P$ and to the left of the right side of $P$. Since the left and right side of the trapezoid coincides with the left and right side of $P$, $q$ is bounded by the four sides of the trapezoid and so must lie in it.
   
-  Assume $q$ lies in the quadrilateral. By construction the quadrilateral is fully contained in $P$ so $q$ also lies in $P$.
+  Assume $q$ lies in the trapezoid. By construction the trapezoid is fully contained in $P$ so $q$ also lies in $P$.
 \end{proof}
 
 We can find the vertices defining $e_l$ and $e_r$ by binary search in the array.
@@ -53,42 +53,50 @@ Assume the first entry in the array is the top vertex of $P$. We can find the bo
 \end{pinQtime}
 
 \begin{proof}
-  We need one binary search to find the bottom vertex taking $O(\log n)$ time. We need two binary searches to find $e_l$ and $e_r$ taking $O(\log n)$ time. Determining if $q$ is in the quadrilateral can be done in $O(1)$ time. So the total time is $O(\log n)$.
+  We need one binary search to find the bottom vertex taking $O(\log n)$ time. We need two binary searches to find $e_l$ and $e_r$ taking $O(\log n)$ time. Determining if $q$ is in the trapezoid can be done in $O(1)$ time. So the total time is $O(\log n)$.
 \end{proof}
 
 \chapter*{Assignment 6.7}
 
 \chapter*{Assignment 6.16}
-We need to define a data structure that can be used for the vertical ray shooting problem in 2D.
+We need to define a data structure that can be used for the vertical ray shooting problem in 2D. For a set of line segments we look at the projection onto the x-axis. The projection should be such that if a line segment $l_i$ is below another segment $l_j$ then $l_i$ shadows $l_j$ partly or fully. This wil give a division of the x-axis which reflects which line segment is first intersected by a vertical ray coming from below. We can store this division in a sorted array and locate the intersected segment by binary search. Each entry in the array is a structure that stores the endpoints and the label of the projected segment.
+
+\paragraph{}
+We consider line segments to be closed, which means we have four different types of projected segments: open, closed, half-open to the left and half-open to the right. We need to store this information in the array. We consider lines that meet to be intersecting. Treating segments as closed allows us to treat vertical segments in the same way as non-vertical segments.
 
 \paragraph{Storage}
-For a set of line segments we want to look at the projection onto the x-axis. The projection should be such that if a line segment $l_i$ is below another segment $l_j$ then $l_i$ shadows $l_j$. This wil give a division of the x-axis which reflects which line segment is first intersected by a vertical ray coming from below. 
-
 \begin{rayshooting}
   Storing the projected line segments requires $O(m)$ space where $m \le 2n-1$ is the number of projected line segments.
 \end{rayshooting}
-\begin{proof}(TODO: Improve this, it is way to loose)
-  If a segment apears more than once in the projection it must be because there is at least one subsegment of the segment that is shadowed by a group of other segments. Consider what happens when this group of segments is added. Before it is added there is $2n'-1$ projected segments. After it is added there is $2n'-1 + 2k-1 + 1 = 2(n'+k)-1$ projected segments, where $k$ is the number of segments in the group and $n'$ is the number of segments before the group is added.
+\begin{proof}
+We can show this by induction. We look at the segments ordered by decreasing y-coordinate and project them onto the x-axis one by one. For $n = 1$ we have $m = 1 \le 2n -1$. For the inductive case assume we have $n-1$ segments and $m \le 2(n-1) - 1 = 2n - 3$. When we add the $n$'th segment ($l^n$) it can fully shadow segments, partially shadow segments or not shadow segments.
+
+If $l^n$ does not shadow any segments it gives rise to a single projected segment, so $m \le 2n - 3 + 1 \le 2n - 1$.
+
+If $l^n$ fully shadows some other segment, the number of projected segments will be reduced.
+
+For the last case we observe that at most two segments can be partially shadowed. There can be $O(n)$ fully shadowed segments between be the partially shadowed segments, but since these decrease the number of projected segments we consider the case where no segments are fully shadowed. We have two cases, one segment is partially shadowed or two segments are partially shadowed. 
+
+\begin{description}
+\item[One segment shadowed] Let $l^s$ be the partially shadowed segment. If both end points of $l^n$ lies inside $l^s$ we get three new segments $(l^s_{left},l^n_{left})$, $(l^n_{left}, l^n_{right})$, $(l^n_{right}, l^s_{right})$ and we remove the segment $(l^s_{left}, l^s_{right})$, so we add two segments. If only a single endpoint of $l^n$ lies inside $l^s$ we add two new segments and remove one.
+\item[Two segments shadowed] Let $l^l$ be the left shadowed segment and $l^r$ the right shadowed segment. When we add $l^n$ we get the new segments $(l^l_{left},l^n_{left})$, $(l^n_{left}, l^n_{right})$, $(l^n_{right}, l^r_{right})$ and remove the segment $(l^l_{left}, l^r_{\right})$ resulting in two new segments.
+\end{description}
+So we add at most two new segments, so $m \le 2n - 3 + 2 = 2n -1$.
 \end{proof}
 
-\paragraph{}
-We consider line segments to be closed, which means we have four different types of projected segments: open, closed, half-open to the left and half-open to the right. We need to store this information in the array. We consider lines that meet to be intersecting. 
 
 \paragraph{Query time}
-TODO: Describe how search is done
-Problems:
-Ray intersects vertex. (line open/closed? probably closed, because otherwise we need to distinguish between shadowed/non-shadowed segments.
-
 \begin{rayshooting}
   We can locate the first segment that is intersected by a vertical ray in $O(\log n)$ time.
 \end{rayshooting}
 \begin{proof}
-  We have the projected segments stored in an array sorted by increasing $x$-coordinate. We can find the intersected line segment using binary search which takes $O(\log n)$.
+We use binary search to locate the segment closest to the ray. We can check if a segment is intersected by the ray in constant time resulting in a $O(\log n)$ query time.
+%  We have the projected segments stored in an array sorted by increasing $x$-coordinate. We can find the intersected line segment using binary search which takes $O(\log n)$.
 \end{proof}
 
 
 \paragraph{Preprocessing}
-We can build the array using plane sweep along the $x$-axis. Assume line segments are defined such that the vertex with lowest $x$-coordinate is given first. If this is not the case, then we can redefine the segments in $O(n)$ time. First we store the vertices in a priority queue orderes by $x$-coordinate.
+We can build the array using plane sweep along the $x$-axis. Assume line segments are defined such that the vertex with lowest $x$-coordinate is given first. If this is not the case, then we can redefine the segments in $O(n)$ time. First we store the vertices in a priority queue ordered by $x$-coordinate.
 
 We must keep track of the segments intersected by the sweep line. We need to know which segment is currently visible, so we store the intersected segments in a balanced binary search tree ordered by $y$-coordinate.
 When a start vertex is encountered the segment is added to the tree, if the newly added segment is below the currently visible segment an entry is added to the array containing the segment that was previously visible.
@@ -99,11 +107,13 @@ When an end vertex is encountered the corresponding segment is removed from the 
 \end{rayshooting}
 \begin{proof}
   Building the priority queue takes $O( n \log n)$ time. 
-  When a start vertex is encountered a segment is added to the search tree, this takes $O(\log n)$. When an end vertex is encountered a segment is removed from the search tree, this takes $O(\log n)$. So for each segment we need $O(\log n)$ which in total is $O(n \log n)$.
+  When a start vertex is encountered a segment is added to the search tree, this takes $O(\log n)$. When an end vertex is encountered a segment is removed from the search tree, this takes $O(\log n)$. So for each segment we need $O(\log n)$ giving a total preprocessing time of $O(n \log n)$.
 \end{proof}
 
 \subsection*{Intersecting line segments}
-Look at section 2 on line segment intersections.
+We can reuse the data structure and query algorithm, but we need to change the construction algorithm. TODO: Explain new construction algorithm.
+
+
 
 
 \chapter*{Assignment 10.1}
@@ -112,7 +122,7 @@ The primary structure is a balanced binary search tree ordered by y-coordinate. 
 \subsection*{a. Algorithm}
 
 \paragraph{Construction}
-We can adapt the \textsc{ Build2DRangeTree} algorithm to construct a range tree with associated interval trees. This gives us a recursive algorithm that takes a set of intervals as input and returns the root of the range tree.
+We can adapt the \textsc{Build2DRangeTree} algorithm to construct a range tree with associated interval trees. This gives us a recursive algorithm that takes a set of intervals as input and returns the root of the range tree.
 \begin{verbatim}
 BuildRangeIntervalTree(I)  
   iTree = ConstructIntervalTree(I)
@@ -132,11 +142,11 @@ We can adapt the \textsc{ 1DRangeQuery} algorithm from \cite{deBerg} by replacin
 
 
 \subsection*{b. Correctness}
-
 \paragraph{Construction}
+TODO: Correctness of construction.
 
 \paragraph{Query}
-Correctness of the query follows directy from correctness of \textsc{ 1DRangeQuery} and \textsc{ QueryIntervalTree}. TODO: Correctness of construction.
+Correctness of the query follows directy from correctness of \textsc{ 1DRangeQuery} and \textsc{ QueryIntervalTree}.
 
 
 \subsection*{c. Bounds}
