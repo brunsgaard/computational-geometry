@@ -19,6 +19,8 @@
 
 \newtheorem{rayshooting}{Theorem}
 
+\addbibresource{bibliography.bib}
+
 \title{Computational Geometry, Assignment 3}
 \author{
     Jonas Brunsgaard \& Silas Ørting
@@ -107,8 +109,10 @@ Look at section 2 on line segment intersections.
 \chapter*{Assignment 10.1}
 The primary structure is a balanced binary search tree ordered by y-coordinate. Each inner node $v$ stores an interval tree that indexes the canonical subset $P(v)$ on x-coordinate.
 
-\paragraph{a. Construction}
-We can adapt the {\sc Build2DRangeTree} algorithm to construct a range tree with associated interval trees. This gives us a recursive algorithm that takes a set of intervals as input and returns the root of the range tree.
+\subsection*{a. Algorithm}
+
+\paragraph{Construction}
+We can adapt the \textsc{ Build2DRangeTree} algorithm to construct a range tree with associated interval trees. This gives us a recursive algorithm that takes a set of intervals as input and returns the root of the range tree.
 \begin{verbatim}
 BuildRangeIntervalTree(I)  
   iTree = ConstructIntervalTree(I)
@@ -123,16 +127,23 @@ BuildRangeIntervalTree(I)
   return v
 \end{verbatim}
 
-\paragraph{a. Query}
-We can adapt the {\sc 1DRangeQuery} algorithm from \cite{deBerg} by replacing the call to {\sc ReportSubtree} with a call to {\sc QueryIntervalTree}.
+\paragraph{Query}
+We can adapt the \textsc{ 1DRangeQuery} algorithm from \cite{deBerg} by replacing the call to \textsc{ ReportSubtree} with a call to \textsc{ QueryIntervalTree}.
 
 
-\paragraph{b. Correctness}
-Correctness of the query follows directy from correctness of {\sc 1DRangeQuery} and {\sc QueryIntervalTree}.
+\subsection*{b. Correctness}
+
+\paragraph{Construction}
+
+\paragraph{Query}
+Correctness of the query follows directy from correctness of \textsc{ 1DRangeQuery} and \textsc{ QueryIntervalTree}. TODO: Correctness of construction.
 
 
-\paragraph{c. Bounds}
-We can build the primary structure in $O(n \log n)$. Each secondary structure can be build in $O(n \log n)$. We get the recurrence relation
+\subsection*{c. Bounds}
+\paragraph{Space}We have from lemma 5.6 in \cite{deBerg} that a 2D range tree uses $O(n \log n)$ storage. Our data structure is a 2d range tree where the associated 1D range tree has been replaced with an interval tree. Since both 1D range trees and interval trees needs $O(n)$ storage, lemma 5.6 also holds in this case, so we need $O(n \log n)$ storage.
+
+\paragraph{Preprocessing}
+We can build the primary structure in $O(n \log n)$. Each secondary structure can be build in $O(n \log n)$. This gives us the recurrence relation
 \begin{align*}
   T(n) &= \twopartdef{O(1)}{n = 1}{2T(n/2) + O(n \log n)}{n > 1}
 \end{align*}
@@ -140,13 +151,27 @@ From case 2 of the Master theorem we find that this has the solution
 \begin{align*}
   T(n) = O(n \log^2 n)
 \end{align*}
+so we can build the range-interval tree in $O(n \log^2 n)$.
+
+\paragraph{Query}
+To query the tree we need to folow two paths from the root to the two leaves that bound the range from above and below. This takes $O(\log n)$ time and gives us $O(\log n)$ canonical subsets that needs to be queried. Each subset is stored in an interval tree which can be queried in $O(\log n)$ time. So we need $O(\log n)O(\log n) = O(\log^2 n)$ query time.
+
 
 
 
 \chapter*{Assignment 10.6}
 
 \chapter*{Assignment 10.9}
+We need to find intervals on the real line that are completely contained in a given query interval. We can answer this query by constructing a 2D range tree. The primary structure is a balanced binary search tree indexed on the leftmost x-coordinate of the intervals. The associated structure is a list sorted on the rightmost x-coordinate of the intervals. When we need to report a subtree we just walk the list untill we find a rightmost x-coordinate that is not in the query interval.
+
+\paragraph{Query time}
+We use $O(\log n)$ time walking down the tree. For each node we visit we spend $O(m + 1)$ time, where $m$ is the number of intervals we report at the node. We only report an interval once, so in total we need $O(\log n + k)$ where $k$ is the number of reported nodes.
+
+\paragraph{Storage}
+The associated sorted list requires $O(n)$ storage. As in 10.1 we have a range tree where the associated structure has been replaced with one of the same size. So the total storage needed is $O(n \log n)$.
+
 
 \chapter*{Assignment 10.10}
 
+\printbibliography
 \end{document}
