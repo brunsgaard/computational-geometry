@@ -17,12 +17,17 @@
 \newtheorem{pinQ}{Theorem}
 \newtheorem{pinQtime}[pinQ]{Theorem}
 
+\newtheorem{rayshooting}{Theorem}
+
 \title{Computational Geometry, Assignment 3}
 \author{
     Jonas Brunsgaard \& Silas Ørting
 }
 \begin{document}
 \maketitle
+
+\chapter*{Assignment 6.5}
+
 
 \chapter*{Assignment 6.6}
 We need to test if a query point $q$ is inside a y-monotone polygon $P$ in $O(\log n)$ time. If $q$ is below the top vertex in $P$ and above the bottom vertex in $P$ then for each side of $P$ there will be a pair of adjacent vertices bounding the $y$-coordinate of $q$. Let the line segment defined by the left pair be denoted $e_l$ and the other $e_r$. Let $e_a$ be a horisontal line going through the vertex above $q$ with the lowest $y$-coordinate, and let $e_b$ be a horisontal line through the vertex below $q$ with the greatest $y$-coordinate. 
@@ -49,11 +54,99 @@ Assume the first entry in the array is the top vertex of $P$. We can find the bo
   We need one binary search to find the bottom vertex taking $O(\log n)$ time. We need two binary searches to find $e_l$ and $e_r$ taking $O(\log n)$ time. Determining if $q$ is in the quadrilateral can be done in $O(1)$ time. So the total time is $O(\log n)$.
 \end{proof}
 
+\chapter*{Assignment 6.7}
 
 \chapter*{Assignment 6.16}
+We need to define a data structure that can be used for the vertical ray shooting problem in 2D.
 
-\chapter*{Assignment 10.}
+\paragraph{Storage}
+For a set of line segments we want to look at the projection onto the x-axis. The projection should be such that if a line segment $l_i$ is below another segment $l_j$ then $l_i$ shadows $l_j$. This wil give a division of the x-axis which reflects which line segment is first intersected by a vertical ray coming from below. 
 
-\chapter*{Assignment 10.}
+\begin{rayshooting}
+  Storing the projected line segments requires $O(m)$ space where $m \le 2n-1$ is the number of projected line segments.
+\end{rayshooting}
+\begin{proof}(TODO: Improve this, it is way to loose)
+  If a segment apears more than once in the projection it must be because there is at least one subsegment of the segment that is shadowed by a group of other segments. Consider what happens when this group of segments is added. Before it is added there is $2n'-1$ projected segments. After it is added there is $2n'-1 + 2k-1 + 1 = 2(n'+k)-1$ projected segments, where $k$ is the number of segments in the group and $n'$ is the number of segments before the group is added.
+\end{proof}
+
+\paragraph{}
+We consider line segments to be closed, which means we have four different types of projected segments: open, closed, half-open to the left and half-open to the right. We need to store this information in the array. We consider lines that meet to be intersecting. 
+
+\paragraph{Query time}
+TODO: Describe how search is done
+Problems:
+Ray intersects vertex. (line open/closed? probably closed, because otherwise we need to distinguish between shadowed/non-shadowed segments.
+
+\begin{rayshooting}
+  We can locate the first segment that is intersected by a vertical ray in $O(\log n)$ time.
+\end{rayshooting}
+\begin{proof}
+  We have the projected segments stored in an array sorted by increasing $x$-coordinate. We can find the intersected line segment using binary search which takes $O(\log n)$.
+\end{proof}
+
+
+\paragraph{Preprocessing}
+We can build the array using plane sweep along the $x$-axis. Assume line segments are defined such that the vertex with lowest $x$-coordinate is given first. If this is not the case, then we can redefine the segments in $O(n)$ time. First we store the vertices in a priority queue orderes by $x$-coordinate.
+
+We must keep track of the segments intersected by the sweep line. We need to know which segment is currently visible, so we store the intersected segments in a balanced binary search tree ordered by $y$-coordinate.
+When a start vertex is encountered the segment is added to the tree, if the newly added segment is below the currently visible segment an entry is added to the array containing the segment that was previously visible.
+When an end vertex is encountered the corresponding segment is removed from the tree, if this segment was the visible segment an entry is added to the array.
+
+\begin{rayshooting}
+  The vertical ray shooting array can be build in $O(n \log n)$ time.
+\end{rayshooting}
+\begin{proof}
+  Building the priority queue takes $O( n \log n)$ time. 
+  When a start vertex is encountered a segment is added to the search tree, this takes $O(\log n)$. When an end vertex is encountered a segment is removed from the search tree, this takes $O(\log n)$. So for each segment we need $O(\log n)$ which in total is $O(n \log n)$.
+\end{proof}
+
+\subsection*{Intersecting line segments}
+Look at section 2 on line segment intersections.
+
+
+\chapter*{Assignment 10.1}
+The primary structure is a balanced binary search tree ordered by y-coordinate. Each inner node $v$ stores an interval tree that indexes the canonical subset $P(v)$ on x-coordinate.
+
+\paragraph{a. Construction}
+We can adapt the {\sc Build2DRangeTree} algorithm to construct a range tree with associated interval trees. This gives us a recursive algorithm that takes a set of intervals as input and returns the root of the range tree.
+\begin{verbatim}
+BuildRangeIntervalTree(I)  
+  iTree = ConstructIntervalTree(I)
+  if size(I) == 1
+    v = leaf(I[0], iTree)
+  else
+    (leftI, rightI, yMid) = SplitIntervalsOnMedianY(I)
+    vLeft = BuildRangeIntervalTree(leftI)
+    vRight = BuildRangeIntervalTree(rightI)
+    v = node(yMid, vLeft, vRight, iTree)
+  end
+  return v
+\end{verbatim}
+
+\paragraph{a. Query}
+We can adapt the {\sc 1DRangeQuery} algorithm from \cite{deBerg} by replacing the call to {\sc ReportSubtree} with a call to {\sc QueryIntervalTree}.
+
+
+\paragraph{b. Correctness}
+Correctness of the query follows directy from correctness of {\sc 1DRangeQuery} and {\sc QueryIntervalTree}.
+
+
+\paragraph{c. Bounds}
+We can build the primary structure in $O(n \log n)$. Each secondary structure can be build in $O(n \log n)$. We get the recurrence relation
+\begin{align*}
+  T(n) &= \twopartdef{O(1)}{n = 1}{2T(n/2) + O(n \log n)}{n > 1}
+\end{align*}
+From case 2 of the Master theorem we find that this has the solution
+\begin{align*}
+  T(n) = O(n \log^2 n)
+\end{align*}
+
+
+
+\chapter*{Assignment 10.6}
+
+\chapter*{Assignment 10.9}
+
+\chapter*{Assignment 10.10}
 
 \end{document}
