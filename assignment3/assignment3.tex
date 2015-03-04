@@ -117,7 +117,7 @@ For the last case we observe that at most two segments can be partially shadowed
 
 \begin{description}
 \item[One segment shadowed] Let $l^s$ be the partially shadowed segment. If both end points of $l^n$ lies inside $l^s$ we get three new segments $(l^s_{left},l^n_{left})$, $(l^n_{left}, l^n_{right})$, $(l^n_{right}, l^s_{right})$ and we remove the segment $(l^s_{left}, l^s_{right})$, so we add two segments. If only a single endpoint of $l^n$ lies inside $l^s$ we add two new segments and remove one.
-\item[Two segments shadowed] Let $l^l$ be the left shadowed segment and $l^r$ the right shadowed segment. When we add $l^n$ we get the new segments $(l^l_{left},l^n_{left})$, $(l^n_{left}, l^n_{right})$, $(l^n_{right}, l^r_{right})$ and remove the segment $(l^l_{left}, l^r_{\right})$ resulting in two new segments.
+\item[Two segments shadowed] Let $l^l$ be the left shadowed segment and $l^r$ the right shadowed segment. When we add $l^n$ we get the new segments $(l^l_{left},l^n_{left})$, $(l^n_{left}, l^n_{right})$, $(l^n_{right}, l^r_{right})$ and remove the segment $(l^l_{left}, l^r_{right})$ resulting in two new segments.
 \end{description}
 So we add at most two new segments, so $m \le 2n - 3 + 2 = 2n -1$.
 \end{proof}
@@ -149,8 +149,7 @@ When an end vertex is encountered the corresponding segment is removed from the 
 \end{proof}
 
 \subsection*{Intersecting line segments}
-We can reuse the data structure and query algorithm, but we need to change the construction algorithm. TODO: Explain new construction algorithm.
-
+We can reuse the data structure and query algorithm, but we need to change the construction algorithm. We can transform a set of intersecting lines to a set of non-intersecting lines by splitting intersecting segments into smaller non-intersecting segments. Each pair of intersecting segments can be made non-intersecting by splitting one of the segments at the intersection point. When we split the segment we make a small gap such that the new endpoints do not coincide. There are $O(n^2)$ intersections, so we risk getting $O(n^2)$ new segments. We can use the line intersection algorithm from chapter 2 in \cite{deBerg} to find intersection points, this runs in $O((n + I)\log n)$ where $I$ is the number of intersections. Loose bounds are $O(n^2)$ for storage, $O(\log n^2)$ for queries and $O(n^2 \log n^2)$ for preprocessing. This can be improved by finding a tight bound on the number of new segments that is not fully shadowed.
 
 
 
@@ -180,9 +179,6 @@ We can adapt the \textsc{ 1DRangeQuery} algorithm from \cite{deBerg} by replacin
 
 
 \subsection*{b. Correctness}
-\paragraph{Construction}
-TODO: Correctness of construction.
-
 \paragraph{Query}
 Correctness of the query follows directy from correctness of \textsc{ 1DRangeQuery} and \textsc{ QueryIntervalTree}.
 
