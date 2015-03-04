@@ -1,4 +1,4 @@
-\documentclass[10pt,a4paper,final,oneside,openany,article]{memoir}
+\documentclass[10pt,a4paper,final,oneside,openany,article,oldfontcommands]{memoir}
 
 \input{prelude}
 
@@ -29,10 +29,30 @@
 \maketitle
 
 \chapter*{Assignment 6.5}
+We are given a convex polygon $\mathcal{P}$ as an array of its $n$ vertices in
+CCW sorted order [$p_0, p_1,p_2, \dots, p_n$].
+
+We now imagne a line segment between $p_0$ and $p_{\lceil n/2 \rceil}$. This
+will split our convex polygon into two smaller convex polygons. If $q$ is
+below the line $(p_0, p_{\lceil n/2 \rceil}$ we continue our search in the
+convex polygon below, otherwise we continue our search in the convex polygon
+above. We continue this aproach until we after at most $log(n)$, subdivisions
+get a triangle. Because $\mathcal{P}$ is convex we know that every combination
+of vertices lies inside $\mathcal{P}$.
+
+At this point we can check in $O(3)$ if the point $q$ is in the triangle. if
+that is the case we know that $q$ is inside our polygon $\mathcal{P}$.
 
 
 \chapter*{Assignment 6.6}
-We need to test if a query point $q$ is inside a y-monotone polygon $P$ in $O(\log n)$ time. If $q$ is below the top vertex in $P$ and above the bottom vertex in $P$ then for each side of $P$ there will be a pair of adjacent vertices bounding the $y$-coordinate of $q$. Let the line segment defined by the left pair be denoted $e_l$ and the other $e_r$. Let $e_a$ be a horisontal line going through the vertex above $q$ with the lowest $y$-coordinate, and let $e_b$ be a horisontal line through the vertex below $q$ with the greatest $y$-coordinate. 
+We need to test if a query point $q$ is inside a y-monotone polygon $P$ in
+$O(\log n)$ time. If $q$ is below the top vertex in $P$ and above the bottom
+vertex in $P$ then for each side of $P$ there will be a pair of adjacent
+vertices bounding the $y$-coordinate of $q$. Let the line segment defined by
+the left pair be denoted $e_l$ and the other $e_r$. Let $e_a$ be a horisontal
+line going through the vertex above $q$ with the lowest $y$-coordinate, and
+let $e_b$ be a horisontal line through the vertex below $q$ with the greatest
+$y$-coordinate.
 
 \begin{pinQ}
   Iff $q$ is in $P$ it will lie in the trapezoid defined by the intersection of $e_l, e_r, e_a, e_b$.  
@@ -57,6 +77,24 @@ Assume the first entry in the array is the top vertex of $P$. We can find the bo
 \end{proof}
 
 \chapter*{Assignment 6.7}
+We are given a starshaped polygon $\mathcal{P}$ as an array of its $n$ vertices in
+CCW sorted order [$p_0, p_1,p_2, \dots, p_n$]. and a point $p_\textrm{star}$.
+
+The idea here is the same as in 6.5, we will divide the star-shaped polygon
+into smaller star-shaped polygons, until we get a triangle, and when we have
+the triangle we will test if $q$ is in the triangle.
+
+We now imagne a line segment between $p_\textrm{star}$ and $p_0$ and another
+line segment between $p_\textrm{star}$ and $p_{\lceil n/2 \rceil}$.
+
+Now we determine which one of the two new star-shaped polygon, $q$
+\emph{may} be part of. This can be done using vector normalization and
+dot products to determine angles between $\vec{p_\textrm{star}p_1}$,
+$\vec{p_\textrm{star}p_{\lceil n/2 \rceil}}$ and $\vec{p_\textrm{star}q}$.§
+
+We continue this aproach until we after at most $log(n)$, divisions of
+$\mathcal{P}$ get a polygon which is a triangle. We can now test in constant
+time if $q$ lies inside this triangle and thus $\mathcal{P}$.
 
 \chapter*{Assignment 6.16}
 We need to define a data structure that can be used for the vertical ray shooting problem in 2D. For a set of line segments we look at the projection onto the x-axis. The projection should be such that if a line segment $l_i$ is below another segment $l_j$ then $l_i$ shadows $l_j$ partly or fully. This wil give a division of the x-axis which reflects which line segment is first intersected by a vertical ray coming from below. We can store this division in a sorted array and locate the intersected segment by binary search. Each entry in the array is a structure that stores the endpoints and the label of the projected segment.
@@ -170,6 +208,19 @@ To query the tree we need to folow two paths from the root to the two leaves tha
 
 
 \chapter*{Assignment 10.6}
+\paragraph{a} Instead of storing the intervals at the nodes, we simply store
+the number of them instead, thus we only have to do a single binary search in
+the segment tree and on the way down add the numbers of interval together. It
+is clear that this take $O(log(n))$ time. The construction time is not
+affected and is still $O(nlog(n))$.
+
+\paragraph{b} The actual problem is that we want to do a range counting query
+from $I_\textrm{mid}$ to $q$, based on the endpoint. We solved this problem in
+last weeks assignment. So instead of arrays we attach range-counting trees.
+Remember that each interval is hold only once by a node in the tree. Thus this
+accumulated range counting queries takes at most $O(log(n))$ time. Thus the
+running time and space consumption is not affected by replaceing the arrays by
+range counting trees.
 
 \chapter*{Assignment 10.9}
 We need to find intervals on the real line that are completely contained in a given query interval. We can answer this query by constructing a 2D range tree. The primary structure is a balanced binary search tree indexed on the leftmost x-coordinate of the intervals. The associated structure is a list sorted on the rightmost x-coordinate of the intervals. When we need to report a subtree we just walk the list untill we find a rightmost x-coordinate that is not in the query interval.
