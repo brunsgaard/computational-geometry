@@ -1,0 +1,49 @@
+\documentclass[10pt,a4paper,final,oneside,openany,article,oldfontcommands]{memoir}
+
+\input{prelude}
+
+% http://www.johndcook.com/blog/2009/09/14/latex-multi-part-definitions/
+\newcommand{\twopartdef}[4] {
+  \left\{
+    \begin{array}{ll}
+      #1 & \mbox{if } #2 \\
+      {#3} & \mbox{if } #4
+    \end{array}
+  \right.
+}
+
+\newcommand{\floor}[1] {\lfloor #1 \rfloor}
+
+\newtheorem{pinQ}{Theorem}
+\newtheorem{pinQtime}[pinQ]{Theorem}
+
+\newtheorem{rayshooting}{Theorem}
+
+\addbibresource{bibliography.bib}
+
+\title{Computational Geometry, Assignment 4}
+\author{
+    Jonas Brunsgaard \& Silas Ørting
+}
+\begin{document}
+\maketitle
+
+
+\chapter*{Assignment 7.1}
+
+\chapter*{Assignment 7.3}
+
+
+\chapter*{Assignment 7.10}
+
+
+\chapter*{Assignment 7.12}
+
+
+\chapter*{Assignment 9.5}
+
+
+\chapter*{Assignment 9.11}
+
+\printbibliography
+\end{document}
