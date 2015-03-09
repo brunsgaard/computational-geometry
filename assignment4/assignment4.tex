@@ -51,6 +51,15 @@ Let $q_i$ and $q_j$ be two neighbouring points on the boundary of $C_P(q_0)$ ($\
 
 
 \chapter*{Assignment 9.11}
+\paragraph{a)}
+
+
+\paragraph{b)}
+The Delaunay triangulation is a planar graph which satisfies
+\begin{align*}
+  n \ge 3 \implies n_e \le 3n - 6,
+\end{align*}
+where $n$ is the number of vertices and $n_e$ the number of edges. We can use Kruskals algorithm to find an MST in $O(n_e \log n_e)$. For a planar graph $O(n_e \log n_e) = O(n \log n)$. We can compute the Delaunay triangulation $O(n \log n)$ expected time, so we can find EMST in $O(n \log n)$ expected time.
 
 \printbibliography
 \end{document}
