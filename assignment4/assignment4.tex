@@ -25,21 +25,21 @@
 
 
 \chapter*{Assignment 7.1}
-Assume $n > 3$. There will be one cell in $Vor(P)$ with $n-1$ vertices if the points such are distributed such that there is a point $q_0$ and all other points are distributed evenly on the boundary of $C_P(q_0)$ (the largest empty circle centered at $q_0$).
+Assume $n > 3$. There will be one cell in $Vor(P)$ with $n-1$ vertices if the points are distributed such that there is a point $q_0$ and all other points are distributed evenly on the boundary of $C_P(q_0)$ (the largest empty circle centered at $q_0$).
 
-From Theorem 7.4 a we have
+From Theorem 7.4 (i) we have
 \begin{align*}
   q \in Vor(P) \iff C_P(q) \text{ contains three or more vertices on its boundary}
 \end{align*}
-Let $q_i$ and $q_j$ be two neighbouring points on the boundary of $C_P(q_0)$ ($\partial C_P(q_0)$) and let $q_{ij} \in \partial C_p(q_0)$ be the midpoint between $q_i$ and $q_j$. Let $n$ be the ray from $q_0$ through $q_{ij}$. Let $C_0$ be the circle defined by the diameter $q_0q_{ij}$, this circle intersects $\partial C_P(q_0)$ in $q_{ij}$. Now extend $C_0$ by moving $q_{ij}$ away from $q_0$ along $n$. Eventually $\partial C_0$ will intersect $\partial C_P(q_0)$ at $q_i$ and $q_j$. From theorem 7.4 we have that the center of $C_0$ will be a vertex in Vor(P). We can do this for each pair of neighbouring points and there are $n-1$ such pairs, so we get $n-1$ vertices in the cell for $q_0$.
+Let $q_i$ and $q_j$ be two neighbouring points on the boundary of $C_P(q_0)$ ($\partial C_P(q_0)$) and let $q_{ij} \in \partial C_p(q_0)$ be the midpoint between $q_i$ and $q_j$. Let $n$ be the ray from $q_0$ through $q_{ij}$. Let $C_0$ be the circle defined by the diameter $q_0q_{ij}$, this circle intersects $\partial C_P(q_0)$ in $q_{ij}$. Now extend $C_0$ by moving $q_{ij}$ away from $q_0$ along $n$. Eventually $\partial C_0$ will intersect $\partial C_P(q_0)$ at $q_i$ and $q_j$. From theorem 7.4 (i) we have that the center of $C_0$ will be a vertex in $Vor(P)$. We can do this for each pair of neighbouring points and there are $n-1$ such pairs, so we get $n-1$ vertices in the cell for $q_0$.
 
 \chapter*{Assignment 7.3}
-Let $X \subset \mathbb{R}$ and define the transformation $T(x) \to (x, x^2)$ that maps the real line to a parabola. Let $Y = \{T(x) | x \in R\}$. Because $T$ is convex all points in $Y$ will lie on the convex hull. We can report the points in sorted order by starting at the leftmost point in the convex hull and moving CCW around the convex hull. Locating the leftmost point and walking the convex hull takes $O(n)$ time. We can recover $X$ in sorted order by applying $T^{-1}$ to the sorted points in $O(n)$ time. As shown in assignment 7.12 we can find the convex hull from the Voronoi diagram in $O(n)$ time. This implies that $\Omega(n \log n)$ is a lower bound for computing the Voronoi diagram.
+Let $X \subset \mathbb{R}$ and define the transformation $T : (x) \to (x, x^2)$ that maps the real line to a parabola. Let $Y = \{T(x) | x \in R\}$. Because $T$ is convex all points in $Y$ will lie on the convex hull. We can report the points in sorted order by starting at the leftmost point in the convex hull and moving CCW around the convex hull. Locating the leftmost point and walking the convex hull takes $O(n)$ time. We can recover $X$ in sorted order by applying $T^{-1}$ to the sorted points in $O(n)$ time. As shown in assignment 7.12 we can find the convex hull from the Voronoi diagram in $O(n)$ time. This implies that $\Omega(n \log n)$ is a lower bound for computing the Voronoi diagram.
 
 
 
 \chapter*{Assignment 7.10}
-Compute the $Vor(P)$ in $O(n \log n)$ time. From theorem 7.4 (ii) we have that the two closest points must share an edge in $Vor(P)$. The number of edges in $Vor(p)$ is $O(n)$. If we store $Vor(P)$ in a DCEL and store the coordinates of the original points in the face records, then we can calculate the distance between all neighbouring points, and thus the smallest distance, in $O(n)$. Total running time is $O(n \log n)$ from computing $Vor(P)$.
+Compute $Vor(P)$ in $O(n \log n)$ time. From theorem 7.4 (ii) we have that the two closest points must share an edge in $Vor(P)$. The number of edges in $Vor(p)$ is $O(n)$. If we store $Vor(P)$ in a DCEL and store the coordinates of the original points in the face records, then we can calculate the distance between all neighbouring points, and thus the smallest distance, in $O(n)$. Total running time is $O(n \log n)$ from computing $Vor(P)$.
 
 
 \chapter*{Assignment 7.12}
