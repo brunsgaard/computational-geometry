@@ -37,12 +37,28 @@ Let $q_i$ and $q_j$ be two neighbouring points on the boundary of $C_P(q_0)$ ($\
 
 
 \chapter*{Assignment 7.10}
+Compute the $Vor(P)$ in $O(n \log n)$ time. From theorem 7.4 (ii) we have that the two closest points must share an edge in $Vor(P)$. The number of edges in $Vor(p)$ is $O(n)$. If we store $Vor(P)$ in a DCEL and store the coordinates of the original points in the face records, then we can calculate the distance between all neighbouring points, and thus the smallest distance, in $O(n)$. Total running time is $O(n \log n)$ from computing $Vor(P)$.
 
 
 \chapter*{Assignment 7.12}
 
 
 \chapter*{Assignment 9.5}
+Let $o$ be the center of the circumcircle with radius $R$ of the triangle defined by $p, q, r$. The circumcircle is the set of points $t$ that satisfies the equations
+\begin{align*}
+  ||p - o||^2 &= R^2\\
+  ||q - o||^2 &= R^2\\
+  ||r - o||^2 &= R^2\\
+  ||t - o||^2 &= R^2.
+\end{align*}
+Denote the interior of the circumcircle by $C$. For a point $s$ we see that $||s - o||^2 < R^2 \iff s \in C$.
+
+We can rewrite these equations to
+\begin{align*}
+  ||t - o||^2 &= 2||t||^2 + 2||o||^2 - ||t + o||
+  = 2||t||^2 + 2||o||^2 - (2 t \cdot o + ||t||^2 + ||o||^2)
+  = ||t||^2 +  -2t_xo_x - 2t_yo_y  + ||o||^2
+\end{align*}
 
 
 \chapter*{Assignment 9.11}
