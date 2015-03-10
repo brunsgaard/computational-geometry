@@ -13,13 +13,8 @@
 }
 
 \newcommand{\floor}[1] {\lfloor #1 \rfloor}
+\newcommand{\D}{\mathcal{D}}
 
-\newtheorem{pinQ}{Theorem}
-\newtheorem{pinQtime}[pinQ]{Theorem}
-
-\newtheorem{rayshooting}{Theorem}
-
-\addbibresource{bibliography.bib}
 
 \title{Computational Geometry, Assignment 4}
 \author{
@@ -51,15 +46,17 @@ Let $q_i$ and $q_j$ be two neighbouring points on the boundary of $C_P(q_0)$ ($\
 
 
 \chapter*{Assignment 9.11}
+We denote the Delaunay triangulation by $\D$.
 \paragraph{a)}
+Assume that the EMST contains an edge $e \notin D$. Let $p_i$ and $p_j$ be the points connected by $e$ and consider the circle with $e$ as diameter. From theorem 9.6 (ii) there must be a point, $p_k$, inside the circle. This point must be connected to $p_i$ and $p_j$. If we consider the cycle defined by $p_i \to p_j \to p_k \to p_i$, then we see that $e$ is the longest edge of this cycle, and by the cycle property of MSTs $e$ cannot be in the EMST. This is a contradiction so there cannot be an edge in EMST that is not in $\D$.
 
 
 \paragraph{b)}
-The Delaunay triangulation is a planar graph which satisfies
+$\D$ is a planar graph which satisfies
 \begin{align*}
   n \ge 3 \implies n_e \le 3n - 6,
 \end{align*}
-where $n$ is the number of vertices and $n_e$ the number of edges. We can use Kruskals algorithm to find an MST in $O(n_e \log n_e)$. For a planar graph $O(n_e \log n_e) = O(n \log n)$. We can compute the Delaunay triangulation $O(n \log n)$ expected time, so we can find EMST in $O(n \log n)$ expected time.
+where $n$ is the number of vertices and $n_e$ the number of edges. We can use Kruskals algorithm to find an MST in $O(n_e \log n_e)$. For a planar graph $O(n_e \log n_e) = O(n \log n)$. We can compute $\D$ in $O(n \log n)$ expected time, so we can find EMST in $O(n \log n)$ expected time.
 
 \printbibliography
 \end{document}
