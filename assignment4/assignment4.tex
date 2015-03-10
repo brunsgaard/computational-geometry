@@ -41,6 +41,8 @@ Compute the $Vor(P)$ in $O(n \log n)$ time. From theorem 7.4 (ii) we have that t
 
 
 \chapter*{Assignment 7.12}
+The convex hull of $P$ can be found by connecting those Vorononi cells that are unbounded, or in the case where we have a bounding box, those cells that share an edge with the bounding box. We can walk around the the edges of the bounding box, by following the half-edges of the unbounded face. Assume we are given a pointer to a half-edge on the boundary that has the unbounded face as its incident face. We can detect if a face is unbounded by checking if the outer component of the face is null. The number of edges on the boundary is $O(n)$. So we can walk through the half-edges on the boundary and get the convex hull of $P$ in $O(n)$ time .
+
 
 
 \chapter*{Assignment 9.5}
