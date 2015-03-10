@@ -34,6 +34,8 @@ From Theorem 7.4 a we have
 Let $q_i$ and $q_j$ be two neighbouring points on the boundary of $C_P(q_0)$ ($\partial C_P(q_0)$) and let $q_{ij} \in \partial C_p(q_0)$ be the midpoint between $q_i$ and $q_j$. Let $n$ be the ray from $q_0$ through $q_{ij}$. Let $C_0$ be the circle defined by the diameter $q_0q_{ij}$, this circle intersects $\partial C_P(q_0)$ in $q_{ij}$. Now extend $C_0$ by moving $q_{ij}$ away from $q_0$ along $n$. Eventually $\partial C_0$ will intersect $\partial C_P(q_0)$ at $q_i$ and $q_j$. From theorem 7.4 we have that the center of $C_0$ will be a vertex in Vor(P). We can do this for each pair of neighbouring points and there are $n-1$ such pairs, so we get $n-1$ vertices in the cell for $q_0$.
 
 \chapter*{Assignment 7.3}
+Let $X \subset \mathbb{R}$ and define the transformation $T(x) \to (x, x^2)$ that maps the real line to a parabola. Let $Y = \{T(x) | x \in R\}$. Because $T$ is convex all points in $Y$ will lie on the convex hull. We can report the points in sorted order by starting at the leftmost point in the convex hull and moving CCW around the convex hull. Locating the leftmost point and walking the convex hull takes $O(n)$ time. We can recover $X$ in sorted order by applying $T^{-1}$ to the sorted points in $O(n)$ time. As shown in assignment 7.12 we can find the convex hull from the Voronoi diagram in $O(n)$ time. This implies that $\Omega(n \log n)$ is a lower bound for computing the Voronoi diagram.
+
 
 
 \chapter*{Assignment 7.10}
@@ -57,9 +59,9 @@ Denote the interior of the circumcircle by $C$. For a point $s$ we see that $||s
 
 We can rewrite these equations to
 \begin{align*}
-  ||t - o||^2 &= 2||t||^2 + 2||o||^2 - ||t + o||
-  = 2||t||^2 + 2||o||^2 - (2 t \cdot o + ||t||^2 + ||o||^2)
-  = ||t||^2 +  -2t_xo_x - 2t_yo_y  + ||o||^2
+  ||t - o||^2 &= 2||t||^2 + 2||o||^2 - ||t + o||\\
+  &= 2||t||^2 + 2||o||^2 - (2 t \cdot o + ||t||^2 + ||o||^2)\\
+  &= ||t||^2 +  -2t_xo_x - 2t_yo_y  + ||o||^2
 \end{align*}
 
 
