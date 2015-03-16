@@ -1,0 +1,25 @@
+\documentclass[10pt,a4paper,final,oneside,openany,article,oldfontcommands]{memoir}
+
+\input{prelude}
+
+\title{Computational Geometry, Assignment 5}
+\author{
+    Jonas Brunsgaard \& Silas Ørting
+}
+\begin{document}
+\maketitle
+
+
+\chapter*{Assignment 13.4}
+See scanned document on last page.
+
+\chapter*{Assignment 15.5}
+$S$ is a set of disjoint polygons and $p_{start}$ is known. We wish to preprocess $S, p_{start}$ using $O(n^2 \log n)$ so we can find the shortest path from $p_{start}$ to any $p_{goal}$ in $O(n \log n)$. 
+
+Let $S^{*} = S \cup p_{start}$. We can find the visibility graph $G_{vis}$ of $S^{*}$ in $O(n^2 \log n)$. We can compute the shortest path from $p_{start}$ to all vertices in $G_{vis}$ in $O(n \log n + O(n^2))$ using Dijkstra. For a point $p_{goal}$ we know from Lemma 15.1 that the vertices of the shortest path from $p_{start}$ to $p_{goal}$ are inner vertices of $S$. We can compute the vertices in $S$ that are visible from $p_{goal}$ in $O(n \log n)$, there are $O(n)$ visible vertices and we can find the shortest path by trying each of these $O(n)$ in constant time. 
+
+Total preprocessing is $O(n^2 \log n) + O(n \log n + O(n^2)) = O(n^2 \log n)$. And total query time is $O(n \log n) + O(n) = O(n \log n)$.
+
+\includepdf[pages={1}]{comp_geom_13_4.pdf}
+
+\end{document}
